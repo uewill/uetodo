@@ -4,15 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var viewRouter = require('./routers/view');
+var homeRouter = require('./routers/home');
 var adminRouter = require('./routers/admin');
-
 
 var app = express();
 var adminapp = express();
 adminapp.use('/',adminRouter);
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +21,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', viewRouter);
+app.use(function(req,res,next){
+  //app.locals={titles:"myAPP"};
+  console.log('ttt');
+  app.locals.titles ='Node 管理平台';
+  next();
+
+});
+app.use('/', homeRouter);
 app.use('/admin',adminapp);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
